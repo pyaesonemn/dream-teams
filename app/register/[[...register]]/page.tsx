@@ -1,19 +1,17 @@
 import { Card } from "@/components";
+import { RegisterForm } from "@/components/Auth";
 import Link from "next/link";
-import React from "react";
 
 const RegisterPage = () => {
 	return (
 		<section className="flex h-[100dvh] items-center justify-center self-center">
 			<div className="h-fit w-[32rem]">
 				<Card>
-					<h2 className="text-2xl font-bold">Register here.</h2>
-					<div>Email Input</div>
-					<div>Password Input</div>
-					<div>Password Confirmation Input</div>
+					<h2 className="mb-6 text-2xl font-bold text-orange-500">Register here.</h2>
+					<RegisterForm />
 					<p className="text-sm">
 						Already had an account,{" "}
-						<Link href="/sign-in" className="text-blue-700">
+						<Link href="/sign-in" className="text-orange-500">
 							Sign in.
 						</Link>
 					</p>
