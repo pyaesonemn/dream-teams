@@ -19,7 +19,7 @@ export const Input: FC<InputProps> = ({
 	...rest
 }) => {
 	return (
-		<div className="flex flex-col gap-y-1">
+		<div className="flex w-full flex-col gap-y-1">
 			<RenderIf condition={Boolean(label)}>
 				<label className="pl-1 text-base font-medium" htmlFor={label}>
 					{label}
