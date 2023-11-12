@@ -6,7 +6,6 @@ type PlayerCardProps = {
 };
 
 export const PlayerCard: FC<PlayerCardProps> = ({ playerInfo }) => {
-	console.log("playerInfo", playerInfo);
 	const PlayerData = [
 		{ label: "Name", value: `${playerInfo?.first_name} ${playerInfo?.last_name}` },
 		{
