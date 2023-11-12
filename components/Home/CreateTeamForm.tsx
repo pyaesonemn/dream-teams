@@ -3,15 +3,30 @@ import { Button, Input } from "..";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/redux/selects.";
-import { FC } from "react";
+import { FC, useEffect } from "react";
+import { Team } from "@/utils";
 
 type CreateTeamFormProps = {
 	setShowModal: (value: boolean) => void;
+	previousData?: Team;
 };
 
-export const CreateTeamForm: FC<CreateTeamFormProps> = ({ setShowModal }) => {
-	const { register, handleSubmit } = useForm();
+export const CreateTeamForm: FC<CreateTeamFormProps> = ({ setShowModal, previousData }) => {
+	const { register, handleSubmit, reset } = useForm();
 	const { user: currentUserName } = useSelector(selectAuth);
+
+	useEffect(() => {
+		if (previousData) {
+			const initialData = {
+				name: previousData.name,
+				playerCount: previousData.playerCount,
+				region: previousData.region,
+				country: previousData.country
+			};
+			reset(initialData);
+		}
+	}, [previousData]);
+
 	const onSubmit = (data: any) => {
 		const users = JSON.parse(localStorage.getItem("users") || "[]");
 		const currentUser = users.find((user: any) => user.username === currentUserName);
@@ -32,6 +47,7 @@ export const CreateTeamForm: FC<CreateTeamFormProps> = ({ setShowModal }) => {
 			console.log("User not found");
 		}
 	};
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-3">
 			{TEAM_FORM.map(({ name, type, label, placeholder }) => (
