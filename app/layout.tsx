@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { sora } from "./fonts";
-import { LowerNavbar, UpperNavbar } from "@/components/Home";
 import { Provider } from "@/redux/Provider";
+import { Navbar } from "@/components/Home/Navbar";
 
 export const metadata: Metadata = {
 	title: "Dream Teams App, Home Page",
@@ -14,10 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 		<Provider>
 			<html lang="en">
 				<body className={sora.className}>
-					<nav className="sticky top-0 z-50 mx-auto flex max-w-5xl flex-col bg-black">
-						<UpperNavbar />
-						<LowerNavbar />
-					</nav>
+					<Navbar />
 					{children}
 				</body>
 			</html>

@@ -3,12 +3,40 @@
 import { SIGN_IN_FORM } from "@/constant/static";
 import { Button, Input } from "..";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { cn } from "@/utils/cn";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAuth } from "@/redux/selects.";
+import { setLoggedIn, setUser } from "@/redux/modules/auth";
 
 export const SignInForm = () => {
+	const router = useRouter();
+	const dispatch = useDispatch();
+	const { isLoggedIn, user } = useSelector(selectAuth);
 	const { register, handleSubmit } = useForm();
 
+	const [errors, setErrors] = useState<Array<string>>([]);
+	const isError = errors?.length > 0;
+
 	const onSubmit = (data: any) => {
-		console.log(data);
+		const users = JSON.parse(localStorage.getItem("users") || "[]");
+		console.log({ isLoggedIn, user });
+		const { username, password } = data;
+		const foundUser = users.find((user: any) => user.username === username);
+
+		if (foundUser) {
+			if (foundUser.password === password) {
+				setErrors([]);
+				router.push("/");
+				dispatch(setUser(foundUser.username));
+				dispatch(setLoggedIn(true));
+			} else {
+				setErrors([...errors, "Password is incorrect!"]);
+			}
+		} else {
+			setErrors([...errors, "Username does not exist!"]);
+		}
 	};
 	return (
 		<form className="mb-2 flex w-4/5 flex-col gap-y-3" onSubmit={handleSubmit(onSubmit)}>
@@ -22,7 +50,13 @@ export const SignInForm = () => {
 					register={register}
 				/>
 			))}
-			<Button variant="primary" type="submit" className="mt-3">
+			{isError &&
+				errors.map((error) => (
+					<span key={error} className="ml-1 text-sm font-semibold text-red-500">
+						- {error}
+					</span>
+				))}
+			<Button variant="primary" type="submit" className={cn(isError ? "mt-0" : "mt-3")}>
 				Sign In
 			</Button>
 		</form>

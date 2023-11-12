@@ -1,9 +1,9 @@
 export const REGISTER_FORM = [
 	{
-		name: "email",
-		type: "email",
-		label: "Email",
-		placeholder: "Enter your email here..."
+		name: "username",
+		type: "text",
+		label: "Username",
+		placeholder: "Enter your username here..."
 	},
 	{
 		name: "password",
@@ -21,10 +21,10 @@ export const REGISTER_FORM = [
 
 export const SIGN_IN_FORM = [
 	{
-		name: "email",
-		type: "email",
-		label: "Email",
-		placeholder: "Enter your email here..."
+		name: "username",
+		type: "username",
+		label: "Username",
+		placeholder: "Enter your username here..."
 	},
 	{
 		name: "password",

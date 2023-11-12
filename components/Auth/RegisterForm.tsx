@@ -8,7 +8,9 @@ export const RegisterForm = () => {
 	const { register, handleSubmit } = useForm();
 
 	const onSubmit = (data: any) => {
-		console.log(data);
+		const { username, password } = data;
+		const users = JSON.parse(localStorage.getItem("users") || "[]");
+		localStorage.setItem("users", JSON.stringify(users.concat({ username, password })));
 	};
 
 	return (
