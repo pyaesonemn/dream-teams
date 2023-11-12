@@ -67,13 +67,13 @@ export const PlayersList = () => {
 	);
 
 	useEffect(() => {
-		if (playersList?.data?.length > 0) {
+		if ((playersList as Data)?.data?.length > 0) {
 			if (Boolean(keyword)) {
 				setPlayers([]);
-				setSearchResult(playersList?.data);
+				setSearchResult((playersList as Data)?.data);
 			} else {
 				setSearchResult([]);
-				setPlayers((prevPlayers) => [...prevPlayers, ...playersList?.data]);
+				setPlayers((prevPlayers) => [...prevPlayers, ...(playersList as Data)?.data]);
 			}
 		} else if (Number(pageNumber) > 1) {
 			setNoMoreResult(true);
