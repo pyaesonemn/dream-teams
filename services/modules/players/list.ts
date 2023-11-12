@@ -2,10 +2,12 @@ import { defaultSerializeQueryArgs } from "@reduxjs/toolkit/query";
 
 const playersApi = (build?: any) =>
 	build.query({
-		query: (pageNumber: string) => {
+		query: (params: any) => {
 			return {
-				url: `/players?per_page=12&page=${pageNumber}`,
-				pageNumber,
+				url: `/players?per_page=12&page=${params?.pageNumber}&search=${
+					params?.keyword ? params?.keyword : ""
+				}`,
+				params,
 				method: "GET"
 			};
 		},

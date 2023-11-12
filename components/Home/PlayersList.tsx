@@ -9,6 +9,8 @@ import { RootState } from "@/redux/store";
 import { incrementPageNumber } from "@/redux/modules/playersList";
 import { useEffect, useState } from "react";
 import { Button, LoadingIndicator } from "..";
+import { useRouter } from "next/navigation";
+import { selectPlayersList } from "@/redux/selects.";
 
 type Team = {
 	id: number;
@@ -46,11 +48,11 @@ type Data = {
 
 export const PlayersList = () => {
 	const dispatch = useDispatch();
-	const pageNumber = useSelector<RootState, string>(
-		(state) => state[PLAYERS_LIST_SLICE].pageNumber
-	);
+	const { pageNumber, keyword } = useSelector(selectPlayersList);
+	console.log(Boolean(keyword));
 
 	const [players, setPlayers] = useState<Player[]>([]);
+	const [searchResult, setSearchResult] = useState<Player[]>([]);
 	const [noMoreResult, setNoMoreResult] = useState<boolean>(false);
 
 	const {
@@ -59,14 +61,22 @@ export const PlayersList = () => {
 		isLoading,
 		isFetching,
 		refetch
-	} = usePlayersQuery(`${pageNumber}`, {
-		skip: noMoreResult
-	});
+	} = usePlayersQuery(
+		{ pageNumber, keyword },
+		{
+			skip: noMoreResult
+		}
+	);
 
 	useEffect(() => {
 		if (playersList?.data?.length > 0) {
-			setPlayers((prevPlayers) => [...prevPlayers, ...playersList?.data]);
-			console.log(players);
+			if (Boolean(keyword)) {
+				setPlayers([]);
+				setSearchResult(playersList?.data);
+			} else {
+				setSearchResult([]);
+				setPlayers((prevPlayers) => [...prevPlayers, ...playersList?.data]);
+			}
 		} else if (Number(pageNumber) > 1) {
 			setNoMoreResult(true);
 		}
@@ -76,13 +86,22 @@ export const PlayersList = () => {
 		dispatch(incrementPageNumber());
 		refetch();
 	};
+
+	useEffect(() => {
+		refetch();
+	}, [keyword]);
+
 	return (
 		<section className="mx-auto max-w-5xl">
-			<div className="my-10 grid grid-flow-row grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+			<div className="my-8 grid grid-flow-row grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
 				{isError ? (
 					<div>Something went wrong.</div>
+				) : Boolean(keyword) ? (
+					searchResult?.map((player: Player) => (
+						<PlayerCard key={player.id} playerInfo={player} />
+					))
 				) : (
-					players.map((player: Player) => (
+					players?.map((player: Player) => (
 						<PlayerCard key={player.id} playerInfo={player} />
 					))
 				)}
@@ -91,13 +110,15 @@ export const PlayersList = () => {
 				<Button
 					disabled={isLoading || isFetching}
 					variant="tertiary"
-					className="flex flex-row items-center gap-x-2"
+					className="mb-5 flex w-full flex-row items-center justify-center gap-x-2"
 					onClick={isLoading || isFetching ? () => {} : handleClick}>
 					Load More
 					{(isLoading || isFetching) && <LoadingIndicator />}
 				</Button>
 			) : (
-				<span>Loading ...</span>
+				<span className="flex flex-row items-center justify-center gap-x-2">
+					Loading <LoadingIndicator />
+				</span>
 			)}
 		</section>
 	);

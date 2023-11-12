@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { PLAYERS_LIST_SLICE } from "../constants";
 
 const initialState = {
-	pageNumber: "1"
+	pageNumber: "1",
+	keyword: ""
 };
 
 export const playersListSlice = createSlice({
@@ -11,9 +12,12 @@ export const playersListSlice = createSlice({
 	reducers: {
 		incrementPageNumber: (state) => {
 			state.pageNumber = String(Number(state.pageNumber) + 1);
+		},
+		setKeyword: (state, action) => {
+			state.keyword = action.payload;
 		}
 	}
 });
 
 export const playersListReducer = playersListSlice.reducer;
-export const { incrementPageNumber } = playersListSlice.actions;
+export const { incrementPageNumber, setKeyword } = playersListSlice.actions;
