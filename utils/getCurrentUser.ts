@@ -19,7 +19,15 @@ type CurrentUser = {
 };
 
 export const getCurrentUser = (currentUserName: string | null): CurrentUser => {
-	const users = JSON.parse(localStorage.getItem("users") || "[]");
-	const currentUser = users.find((user: any) => user.username === currentUserName);
-	return currentUser;
+	if (typeof window !== "undefined") {
+		const users = JSON.parse(window.localStorage.getItem("users") || "[]");
+		const currentUser = users.find((user: any) => user.username === currentUserName);
+		return currentUser;
+	} else {
+		return {
+			username: currentUserName,
+			password: "",
+			teams: []
+		};
+	}
 };
