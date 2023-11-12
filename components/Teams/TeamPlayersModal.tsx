@@ -1,8 +1,9 @@
 import { FC } from "react";
 import { Modal } from "..";
+import { Player } from "@/utils";
 
 type TeamPlayersModalProps = {
-	players: any[];
+	players: Array<Player> | undefined;
 	onClose: () => void;
 	onOk: () => void;
 	show: boolean;
@@ -18,7 +19,7 @@ export const TeamPlayersModal: FC<TeamPlayersModalProps> = ({
 }) => {
 	return (
 		<Modal onClose={onClose} onOk={onOk} show={show} title={title} className="min-h-[24rem]">
-			{players.length > 0 ? (
+			{Boolean(players?.length) ? (
 				<div>wow, there are players</div>
 			) : (
 				<div className="mt-32 flex w-full items-center justify-center text-3xl font-bold text-gray-300">
