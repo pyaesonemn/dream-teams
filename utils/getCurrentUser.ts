@@ -1,4 +1,4 @@
-type Player = {
+export type Player = {
 	name: string;
 	id: number | string;
 	position: string;
