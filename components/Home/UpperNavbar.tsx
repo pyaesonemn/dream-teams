@@ -1,3 +1,5 @@
+"use client";
+
 import { FiUser } from "react-icons/fi";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";

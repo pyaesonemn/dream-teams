@@ -1,13 +1,11 @@
 import { api } from "@/services/api";
 import players from "./list";
-import searchPlayers from "./searchPlayers";
 
 export const playersApi = api.injectEndpoints({
 	endpoints: (build) => ({
-		players: players(build),
-		searchPlayers: searchPlayers(build)
+		players: players(build)
 	}),
 	overrideExisting: false
 });
 
-export const { usePlayersQuery, useSearchPlayersQuery } = playersApi;
+export const { usePlayersQuery } = playersApi;

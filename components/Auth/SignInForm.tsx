@@ -6,14 +6,12 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/utils/cn";
-import { useDispatch, useSelector } from "react-redux";
-import { selectAuth } from "@/redux/selects.";
+import { useDispatch } from "react-redux";
 import { setLoggedIn, setUser } from "@/redux/modules/auth";
 
 export const SignInForm = () => {
 	const router = useRouter();
 	const dispatch = useDispatch();
-	const { isLoggedIn, user } = useSelector(selectAuth);
 	const { register, handleSubmit } = useForm();
 
 	const [errors, setErrors] = useState<Array<string>>([]);
@@ -21,7 +19,6 @@ export const SignInForm = () => {
 
 	const onSubmit = (data: any) => {
 		const users = JSON.parse(localStorage.getItem("users") || "[]");
-		console.log({ isLoggedIn, user });
 		const { username, password } = data;
 		const foundUser = users.find((user: any) => user.username === username);
 
