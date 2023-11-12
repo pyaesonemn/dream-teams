@@ -1,82 +1,51 @@
 "use client";
 
-import { cn } from "@/utils/cn";
-import { FC, ReactNode, useState } from "react";
-import { Backdrop } from ".";
+import { useRef, useEffect, ReactNode, FC, useState } from "react";
+import { Button } from ".";
+import { AiOutlineClose } from "react-icons/ai";
 
-export type ModalProps = {
-	children: ReactNode;
-	className?: string;
-	isOpen: boolean;
+type ModalProps = {
+	title: string;
+	show: boolean;
 	onClose: () => void;
-	isLoading?: boolean;
-	zIndex?: string;
-	overrideEscAction?: boolean;
-	variant?: "slideUp" | "slideDown" | "confirm" | "option";
+	onOk: () => void;
+	children: ReactNode;
 };
 
-export const Modal: FC<ModalProps> = ({
-	children,
-	className,
-	isOpen,
-	onClose,
-	isLoading,
-	zIndex,
-	overrideEscAction,
-	variant = "slideUp"
-}) => {
-	const [isMounted, setIsMounted] = useState<boolean>(false);
-	const defaultCenteringSmStyles =
-		"sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2";
-	const variantStyles: Record<typeof variant, Record<string, string>> = {
-		slideUp: {
-			"0": "sm:hidden translate-y-full sm:translate-y-0 animate-modalSlideUpReverse",
-			"1": "sm:flex top-[55px] animate-modalSlideUp",
-			default: cn(
-				"rounded-t-modal-corner w-full sm:animate-none sm:max-h-[80vh] sm:rounded-base sm:w-[min(100%,600px)]",
-				defaultCenteringSmStyles
-			)
-		},
-		slideDown: {
-			"0": "sm:hidden -translate-y-full sm:translate-y-0 animate-modalSlideDownReverse",
-			"1": "sm:flex h-[calc(100%-80px)] top-0 animate-modalSlideDown",
-			default: cn(
-				"rounded-b-modal-corner w-full sm:animate-none sm:max-h-[80vh] sm:rounded-base sm:w-[min(100%,600px)]",
-				defaultCenteringSmStyles
-			)
-		},
-		confirm: {
-			"0": "hidden",
-			"1": "flex",
-			default: cn("w-[min(320px,95vw)] rounded-base h-fit", defaultCenteringSmStyles)
-		},
-		option: {
-			"0": "hidden",
-			"1": "flex",
-			default:
-				"w-[min(380px,95vw)] max-h-[65vh] h-max mx-auto top-[calc(50%+27.5px)] -translate-y-1/2"
+export const Modal: FC<ModalProps> = ({ title, onClose, onOk, children, show }) => {
+	const dialogRef = useRef<HTMLDialogElement | null>(null);
+
+	useEffect(() => {
+		if (show) {
+			dialogRef.current?.showModal();
+		} else {
+			dialogRef.current?.close();
 		}
+	}, [show]);
+
+	const closeDialog = () => {
+		dialogRef.current?.close();
+		onClose();
+	};
+
+	const clickOk = () => {
+		onOk();
+		closeDialog();
 	};
 
 	return (
-		<div id="modal-test">
-			<div
-				className={cn(
-					"fixed inset-0 flex cursor-auto flex-col overflow-hidden bg-white shadow-xl  sm:h-max",
-					variantStyles[variant].default,
-					isMounted ? "" : "opacity-0",
-					variantStyles[variant][+isOpen],
-					zIndex,
-					className
-				)}>
-				{children}
+		<dialog ref={dialogRef} className="w-4/5 max-w-2xl rounded-2xl backdrop:bg-black/50">
+			<div className="px-6 py-5">
+				<div className="mb-5 flex flex-row items-center justify-between">
+					<h3 className="text-2xl font-bold text-orange-500">{title}</h3>
+					<Button
+						className="flex h-8 w-8 items-center justify-center rounded-full px-0 py-0"
+						onClick={closeDialog}>
+						<AiOutlineClose className="h-4 w-4 font-bold" />
+					</Button>
+				</div>
+				<div className="w-full">{children}</div>
 			</div>
-			<Backdrop
-				show={isOpen}
-				zIndex={zIndex}
-				onClick={!isLoading ? onClose : undefined}
-				submitting={isLoading}
-			/>
-		</div>
+		</dialog>
 	);
 };

@@ -22,7 +22,7 @@ export const REGISTER_FORM = [
 export const SIGN_IN_FORM = [
 	{
 		name: "username",
-		type: "username",
+		type: "text",
 		label: "Username",
 		placeholder: "Enter your username here..."
 	},
@@ -31,6 +31,33 @@ export const SIGN_IN_FORM = [
 		type: "password",
 		label: "Password",
 		placeholder: "Enter your password here..."
+	}
+];
+
+export const TEAM_FORM = [
+	{
+		name: "name",
+		type: "text",
+		label: "Name",
+		placeholder: "Enter your team name here..."
+	},
+	{
+		name: "playerCount",
+		type: "number",
+		label: "Player Count",
+		placeholder: "Enter your player count here..."
+	},
+	{
+		name: "region",
+		type: "text",
+		label: "Region",
+		placeholder: "Enter your team's region here..."
+	},
+	{
+		name: "country",
+		type: "text",
+		label: "Country",
+		placeholder: "Enter your team's country name here..."
 	}
 ];
 

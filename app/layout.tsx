@@ -11,13 +11,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<Provider>
-			<html lang="en">
+		<html lang="en">
+			<Provider>
 				<body className={sora.className}>
 					<Navbar />
 					{children}
 				</body>
-			</html>
-		</Provider>
+			</Provider>
+		</html>
 	);
 }

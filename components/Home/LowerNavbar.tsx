@@ -1,23 +1,40 @@
 "use client";
 
-import { Button, Input } from "..";
+import { Button, Input, Modal } from "..";
 import { useForm } from "react-hook-form";
 import { setKeyword } from "@/redux/modules/playersList";
 import { useDispatch } from "react-redux";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+import { CreateTeamForm } from ".";
 
 type searchData = {
 	searchKeyword: string;
 };
 
 export const LowerNavbar = () => {
+	const router = useRouter();
+	const pathName = usePathname();
+	console.log(pathName);
 	const dispatch = useDispatch();
 
 	const { register, handleSubmit } = useForm();
 
 	const onSubmit = (data: any) => dispatch(setKeyword(data.searchKeyword));
 
+	const [showModal, setShowModal] = useState<boolean>(false);
+
 	return (
 		<div className="flex h-16 w-full items-center justify-between gap-x-2 px-2 sm:px-6 md:gap-x-5 md:px-5 xl:px-0">
+			<Modal
+				show={showModal}
+				title="Create Your Dream Team"
+				onClose={() => setShowModal(false)}
+				onOk={() => {}}>
+				<div>
+					<CreateTeamForm setShowModal={setShowModal} />
+				</div>
+			</Modal>
 			<form className="w-full" onSubmit={handleSubmit(onSubmit)}>
 				<Input
 					type="search"
@@ -28,10 +45,20 @@ export const LowerNavbar = () => {
 				/>
 			</form>
 			<Button
+				onClick={() => setShowModal((prev) => !prev)}
 				type="button"
 				variant="primary"
 				className="h-11 w-24 px-3 py-1 text-xs sm:w-32 sm:py-2 md:w-40 md:px-4 md:text-sm lg:w-48 lg:text-base">
 				Make a team
+			</Button>
+			<Button
+				onClick={() =>
+					pathName === "/my-teams" ? router.push("/") : router.push("/my-teams")
+				}
+				type="button"
+				variant="primary"
+				className="flex h-11 w-24 items-center px-3 py-1 text-xs sm:w-32 sm:py-2 md:w-40 md:px-4 md:text-sm lg:w-48 lg:text-base">
+				{pathName === "/my-teams" ? "Back to list" : "Check out teams"}
 			</Button>
 		</div>
 	);
