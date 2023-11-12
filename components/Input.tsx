@@ -29,7 +29,7 @@ export const Input: FC<InputProps> = ({
 				type={type}
 				{...register(name)}
 				className={cn(
-					"h-10 w-full rounded-[2rem] border-2 border-gray-500 bg-gray-100 px-4 py-2 placeholder:text-gray-400 focus:border-orange-500 focus:outline-none focus:ring-0",
+					"h-10 w-full rounded-[2rem] border-2 border-gray-300 bg-gray-100 px-4 py-2 placeholder:text-gray-400 focus:border-orange-500 focus:outline-none focus:ring-0",
 					className
 				)}
 				{...rest}

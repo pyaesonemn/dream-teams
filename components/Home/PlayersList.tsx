@@ -2,12 +2,12 @@
 "use client";
 
 import { useDispatch, useSelector } from "react-redux";
-import { PlayerCard } from ".";
+import { CreateTeamForm, PlayerCard } from ".";
 import { usePlayersQuery } from "@/services/modules/players";
 import { incrementPageNumber } from "@/redux/modules/playersList";
 import { useEffect, useState } from "react";
-import { Button, LoadingIndicator } from "..";
-import { selectPlayersList } from "@/redux/selects.";
+import { Button, LoadingIndicator, Modal } from "..";
+import { selectAuth, selectPlayersList } from "@/redux/selects.";
 
 type Team = {
 	id: number;
@@ -46,7 +46,8 @@ type Data = {
 export const PlayersList = () => {
 	const dispatch = useDispatch();
 	const { pageNumber, keyword } = useSelector(selectPlayersList);
-	console.log(Boolean(keyword));
+	const { isLoggedIn, user } = useSelector(selectAuth);
+	console.log({ isLoggedIn, user });
 
 	const [players, setPlayers] = useState<Player[]>([]);
 	const [searchResult, setSearchResult] = useState<Player[]>([]);
