@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { TEAM_FORM } from "@/constant/static";
 import { Button, Input } from "..";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/redux/selects.";
-import { FC, useEffect } from "react";
-import { Team } from "@/utils";
+import { FC, useEffect, useState } from "react";
+import { Team, isTeamNameUnique } from "@/utils";
 
 type CreateTeamFormProps = {
 	setShowModal: (value: boolean) => void;
@@ -12,8 +13,15 @@ type CreateTeamFormProps = {
 };
 
 export const CreateTeamForm: FC<CreateTeamFormProps> = ({ setShowModal, previousData }) => {
-	const { register, handleSubmit, reset } = useForm();
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors },
+		setError
+	} = useForm();
 	const { user: currentUserName } = useSelector(selectAuth);
+	const [customErrors, setCustomErrors] = useState<Array<string>>([]);
 
 	useEffect(() => {
 		if (previousData) {
@@ -34,15 +42,20 @@ export const CreateTeamForm: FC<CreateTeamFormProps> = ({ setShowModal, previous
 			if (!currentUser.teams) {
 				currentUser.teams = [];
 			}
-			currentUser.teams.push({
-				name: data.name,
-				playerCount: data.playerCount,
-				region: data.region,
-				country: data.country,
-				players: []
-			});
+			if (isTeamNameUnique(data.name, currentUser.teams)) {
+				setCustomErrors([]);
+				currentUser.teams.push({
+					name: data.name,
+					playerCount: data.playerCount,
+					region: data.region,
+					country: data.country,
+					players: []
+				});
+				setShowModal(false);
+			} else {
+				setCustomErrors(["Team name must be unique."]);
+			}
 			localStorage.setItem("users", JSON.stringify(users));
-			setShowModal(false);
 		} else {
 			console.log("User not found");
 		}
@@ -53,6 +66,7 @@ export const CreateTeamForm: FC<CreateTeamFormProps> = ({ setShowModal, previous
 			{TEAM_FORM.map(({ name, type, label, placeholder }) => (
 				<Input
 					key={name}
+					required={true}
 					name={name}
 					type={type}
 					label={label}
@@ -60,6 +74,9 @@ export const CreateTeamForm: FC<CreateTeamFormProps> = ({ setShowModal, previous
 					register={register}
 				/>
 			))}
+			<div className="text-sm font-medium text-red-500">
+				{customErrors?.map((error) => <span key={error}>{error}</span>)}
+			</div>
 			<Button variant="primary" type="submit" className="mt-3">
 				Create Team
 			</Button>
