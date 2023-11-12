@@ -4,12 +4,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { PlayerCard } from ".";
 import { usePlayersQuery } from "@/services/modules/players";
-import { PLAYERS_LIST_SLICE } from "@/redux/constants";
-import { RootState } from "@/redux/store";
 import { incrementPageNumber } from "@/redux/modules/playersList";
 import { useEffect, useState } from "react";
 import { Button, LoadingIndicator } from "..";
-import { useRouter } from "next/navigation";
 import { selectPlayersList } from "@/redux/selects.";
 
 type Team = {
@@ -92,7 +89,7 @@ export const PlayersList = () => {
 	}, [keyword]);
 
 	return (
-		<section className="mx-auto max-w-5xl">
+		<section className="mx-auto max-w-5xl px-5 sm:px-8 md:px-5 xl:px-0">
 			<div className="my-8 grid grid-flow-row grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
 				{isError ? (
 					<div>Something went wrong.</div>
