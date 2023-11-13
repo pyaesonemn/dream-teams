@@ -1,6 +1,5 @@
 export type Player = {
 	name: string;
-	id: number | string;
 	position: string;
 };
 
@@ -12,7 +11,7 @@ export type Team = {
 	players?: Array<Player>;
 };
 
-type CurrentUser = {
+export type CurrentUser = {
 	username: string | null;
 	password: string;
 	teams?: Array<Team>;

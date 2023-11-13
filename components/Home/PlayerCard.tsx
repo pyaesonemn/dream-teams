@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Button, Card, Modal } from "..";
+import { Button, Card, DreamTeamSelect, Modal } from "..";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/redux/selects.";
 import { getCurrentUser } from "@/utils";
@@ -11,9 +11,9 @@ type PlayerCardProps = {
 export const PlayerCard: FC<PlayerCardProps> = ({ playerInfo }) => {
 	const { user } = useSelector(selectAuth);
 	const currentUser = getCurrentUser(user);
-	console.log(currentUser);
 
 	const [showTeamSelectModal, setShowTeamSelectModal] = useState<boolean>(false);
+	const [dreamTeam, setDreamTeam] = useState<string>("");
 
 	const PlayerData = [
 		{ label: "Name", value: `${playerInfo?.first_name} ${playerInfo?.last_name}` },
@@ -44,10 +44,16 @@ export const PlayerCard: FC<PlayerCardProps> = ({ playerInfo }) => {
 				show={showTeamSelectModal}
 				onClose={() => setShowTeamSelectModal(false)}
 				onOk={() => {}}
-				title="Select Team">
-				<div>
-					{currentUser?.teams?.map((team) => <div key={team.name}>{team.name}</div>)}
-				</div>
+				title={`Select Team for ${playerInfo?.first_name} ${playerInfo?.last_name}`}
+				className="max-w-[32rem]">
+				<DreamTeamSelect
+					playerName={`${playerInfo?.first_name} ${playerInfo?.last_name}`}
+					playerPosition={playerInfo?.position}
+					dreamTeam={dreamTeam}
+					teams={currentUser?.teams}
+					setDreamTeam={setDreamTeam}
+					setShowTeamSelectModal={setShowTeamSelectModal}
+				/>
 			</Modal>
 			<Card className="border-t-4 border-t-orange-500">
 				<div className="mb-4 flex flex-col gap-y-2">
@@ -59,7 +65,7 @@ export const PlayerCard: FC<PlayerCardProps> = ({ playerInfo }) => {
 						</div>
 					))}
 				</div>
-				<div className="flex flex-row items-center justify-between">
+				<div className="mb-1 flex flex-row items-center justify-between">
 					<div className="text-sm font-medium">Dream Team Section</div>
 					<Button
 						onClick={() => setShowTeamSelectModal(true)}
@@ -68,6 +74,13 @@ export const PlayerCard: FC<PlayerCardProps> = ({ playerInfo }) => {
 						Add
 					</Button>
 				</div>
+				{dreamTeam ? (
+					<div className="w-fit rounded-xl bg-orange-500 px-3 py-1 text-sm font-bold text-white">
+						{dreamTeam}
+					</div>
+				) : (
+					<p className="text-sm font-bold text-orange-500/75">Not in a team yet.</p>
+				)}
 			</Card>
 		</>
 	);
