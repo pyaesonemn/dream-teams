@@ -1,9 +1,14 @@
+"use client";
+
 import { FC } from "react";
 import { Modal } from "..";
 import { Player } from "@/utils";
+import { useSelector } from "react-redux";
+import { selectTeam } from "@/redux/selects.";
+import { Member } from "@/redux/modules/team";
 
 type TeamPlayersModalProps = {
-	players: Array<Player> | undefined;
+	teamName: string;
 	onClose: () => void;
 	onOk: () => void;
 	show: boolean;
@@ -11,20 +16,37 @@ type TeamPlayersModalProps = {
 };
 
 export const TeamPlayersModal: FC<TeamPlayersModalProps> = ({
-	players,
+	teamName,
 	onClose,
 	onOk,
 	show,
 	title
 }) => {
+	const { members } = useSelector(selectTeam);
+
+	const getPlayerNamesByTeam = (members: Array<Member>, teamName: string): Array<string> => {
+		const filteredMembers = members.filter((member) => member.teamName === teamName);
+		const playerNames = filteredMembers.map((member) => member.playerName);
+		return playerNames;
+	};
+
+	const currentTeamPlayers = getPlayerNamesByTeam(members, teamName);
+
 	return (
-		<Modal onClose={onClose} onOk={onOk} show={show} title={title} className="min-h-[24rem]">
-			{Boolean(players?.length) ? (
+		<Modal
+			onClose={onClose}
+			onOk={onOk}
+			show={show}
+			title={title}
+			className="min-h-[24rem] max-w-md">
+			{Boolean(currentTeamPlayers?.length) ? (
 				<div>
-					{players?.map((player) => (
-						<div className="flex flex-row justify-between px-4 py-2" key={player.name}>
-							<div>{player.name}</div>
-							<div>position : {player.position ? player.position : "-"}</div>
+					{currentTeamPlayers?.map((player, index) => (
+						<div className="flex flex-row justify-between px-4 py-2" key={player}>
+							<div>
+								<span>{index + 1}. </span>
+								{player}
+							</div>
 						</div>
 					))}
 				</div>

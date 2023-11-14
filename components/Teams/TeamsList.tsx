@@ -10,7 +10,6 @@ import { setTeams } from "@/redux/modules/team";
 export const TeamsList = () => {
 	const dispatch = useDispatch();
 	const { teams } = useSelector(selectTeam);
-	console.log(teams);
 	const { user } = useSelector(selectAuth);
 	const currentUser = getCurrentUser(user);
 	useEffect(() => {}, [dispatch, teams]);

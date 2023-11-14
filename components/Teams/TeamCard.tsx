@@ -8,12 +8,14 @@ import { CreateTeamForm } from "../Home";
 import { TeamPlayersModal } from "./TeamPlayersModal";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/redux/selects.";
+import { useRouter } from "next/navigation";
 
 type TeamCardProps = {
 	teamInfo: Team;
 };
 
 export const TeamCard: FC<TeamCardProps> = ({ teamInfo }) => {
+	const router = useRouter();
 	const { user } = useSelector(selectAuth);
 	const [showEditModal, setShowEditModal] = useState<boolean>(false);
 	const [showPlayersModal, setShowPlayersModal] = useState<boolean>(false);
@@ -35,7 +37,7 @@ export const TeamCard: FC<TeamCardProps> = ({ teamInfo }) => {
 				...currentUser,
 				teams: updatedTeams
 			});
-			window.location.reload();
+			router.refresh();
 			console.log(`Team '${teamNametoDelete}' deleted successfully.`);
 		} else {
 			console.log("User not found");
@@ -52,7 +54,7 @@ export const TeamCard: FC<TeamCardProps> = ({ teamInfo }) => {
 				<CreateTeamForm setShowModal={setShowEditModal} previousData={teamInfo} />
 			</Modal>
 			<TeamPlayersModal
-				players={teamInfo.players}
+				teamName={teamInfo.name}
 				show={showPlayersModal}
 				onClose={() => setShowPlayersModal(false)}
 				onOk={() => {}}

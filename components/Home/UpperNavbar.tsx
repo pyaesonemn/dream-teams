@@ -20,8 +20,6 @@ export const UpperNavbar = () => {
 	const handleLogOut = () => {
 		const currentUser = getCurrentUser(user);
 		const users = JSON.parse(window.localStorage.getItem("users") || "[]");
-		const userObj = users?.find((user: any) => user.username === currentUser.username);
-		console.log({ userObj });
 		if (currentUser) {
 			if (!currentUser.members) {
 				currentUser.members = [];

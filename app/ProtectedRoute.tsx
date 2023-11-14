@@ -18,6 +18,11 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
 		return null;
 	}
 
+	if (isLoggedIn) {
+		router.replace("/players");
+		return null;
+	}
+
 	return <>{children}</>;
 };
 

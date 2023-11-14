@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { selectAuth } from "@/redux/selects.";
 import { FC, useEffect, useState } from "react";
 import { Team, isTeamNameUnique, updateCurrentUser } from "@/utils";
+import { useRouter } from "next/navigation";
 
 type CreateTeamFormProps = {
 	setShowModal: (value: boolean) => void;
@@ -20,6 +21,7 @@ export const CreateTeamForm: FC<CreateTeamFormProps> = ({
 	previousData,
 	pathName
 }) => {
+	const router = useRouter();
 	const { register, handleSubmit, reset } = useForm();
 	const { user: currentUserName } = useSelector(selectAuth);
 	const [customErrors, setCustomErrors] = useState<Array<string>>([]);
@@ -60,7 +62,8 @@ export const CreateTeamForm: FC<CreateTeamFormProps> = ({
 						teams: currentUser.teams
 					});
 					setShowModal(false);
-					pathName === "my-teams" && window.location.reload();
+					router.push("/my-teams");
+					router.refresh();
 				} else {
 					setCustomErrors(["Team name must be unique."]);
 				}
@@ -79,7 +82,7 @@ export const CreateTeamForm: FC<CreateTeamFormProps> = ({
 				setCustomErrors([]);
 				setShowModal(false);
 				console.log("Team updated successfully.");
-				pathName === "my-teams" && window.location.reload();
+				router.refresh();
 			}
 		} else {
 			console.log("User not found");

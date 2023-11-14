@@ -16,7 +16,6 @@ type searchData = {
 export const LowerNavbar = () => {
 	const router = useRouter();
 	const pathName = usePathname();
-	console.log(pathName);
 	const dispatch = useDispatch();
 
 	const { register, handleSubmit } = useForm();
