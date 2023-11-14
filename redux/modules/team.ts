@@ -9,12 +9,10 @@ export type Member = {
 
 type TeamState = {
 	members: Array<Member>;
-	teams: Array<Team>;
 };
 
 const initialState: TeamState = {
-	members: [],
-	teams: []
+	members: []
 };
 
 export const teamSlice = createSlice({
@@ -36,12 +34,9 @@ export const teamSlice = createSlice({
 				(member) => member.playerName !== playerNameToRemove
 			);
 		},
-		resetMembers: () => initialState,
-		setTeams: (state, action) => {
-			state.teams = action.payload;
-		}
+		resetMembers: () => initialState
 	}
 });
 
 export const teamReducer = teamSlice.reducer;
-export const { addMember, removeMember, setMembers, resetMembers, setTeams } = teamSlice.actions;
+export const { addMember, removeMember, setMembers, resetMembers } = teamSlice.actions;

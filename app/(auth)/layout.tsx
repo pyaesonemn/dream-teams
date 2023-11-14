@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
-			<body className={sora.className}>
+			<section className={sora.className}>
 				<div>{children}</div>
-			</body>
+			</section>
 		</html>
 	);
 }

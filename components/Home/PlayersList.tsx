@@ -2,7 +2,7 @@
 "use client";
 
 import { useDispatch, useSelector } from "react-redux";
-import { CreateTeamForm, PlayerCard } from ".";
+import { PlayerCard } from ".";
 import { usePlayersQuery } from "@/services/modules/players";
 import { incrementPageNumber } from "@/redux/modules/playersList";
 import { useEffect, useState } from "react";
@@ -95,12 +95,12 @@ export const PlayersList = () => {
 				{isError ? (
 					<div>Something went wrong.</div>
 				) : Boolean(keyword) ? (
-					searchResult?.map((player: Player) => (
-						<PlayerCard key={player.id} playerInfo={player} />
+					searchResult?.map((player: Player, index) => (
+						<PlayerCard key={index} playerInfo={player} />
 					))
 				) : (
-					players?.map((player: Player) => (
-						<PlayerCard key={player.id} playerInfo={player} />
+					players?.map((player: Player, index) => (
+						<PlayerCard key={player.id + index} playerInfo={player} />
 					))
 				)}
 			</div>
