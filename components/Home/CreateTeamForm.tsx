@@ -1,4 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+"use client";
+
 import { TEAM_FORM } from "@/constant/static";
 import { Button, Input } from "..";
 import { useForm } from "react-hook-form";
@@ -13,7 +15,11 @@ type CreateTeamFormProps = {
 	previousData?: Team;
 };
 
-export const CreateTeamForm: FC<CreateTeamFormProps> = ({ setShowModal, previousData, pathName }) => {
+export const CreateTeamForm: FC<CreateTeamFormProps> = ({
+	setShowModal,
+	previousData,
+	pathName
+}) => {
 	const { register, handleSubmit, reset } = useForm();
 	const { user: currentUserName } = useSelector(selectAuth);
 	const [customErrors, setCustomErrors] = useState<Array<string>>([]);

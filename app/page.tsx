@@ -1,11 +1,11 @@
-"use client";
+import ProtectedRoute from "./ProtectedRoute";
 
-import { PlayersList } from "@/components/Home";
-
-export default function Home() {
+const Page = () => {
 	return (
-		<main className="h-full">
-			<PlayersList />
-		</main>
+		<ProtectedRoute>
+			<main></main>
+		</ProtectedRoute>
 	);
-}
+};
+
+export default Page;
