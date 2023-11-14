@@ -3,18 +3,33 @@
 import { FiUser } from "react-icons/fi";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuth } from "@/redux/selects.";
+import { selectAuth, selectTeam } from "@/redux/selects.";
 import { Button } from "..";
 import { resetAuth } from "@/redux/modules/auth";
 import { useRouter } from "next/navigation";
+import { getCurrentUser, updateCurrentUser } from "@/utils";
+import { resetMembers } from "@/redux/modules/team";
 
 export const UpperNavbar = () => {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const { user } = useSelector(selectAuth);
+	const { members } = useSelector(selectTeam);
 
 	const handleLogOut = () => {
+		const currentUser = getCurrentUser(user);
+		const users = JSON.parse(window.localStorage.getItem("users") || "[]");
+		const userObj = users?.find((user: any) => user.username === currentUser.username);
+		console.log({ userObj });
+		if (currentUser) {
+			if (!currentUser.members) {
+				currentUser.members = [];
+			}
+			// localStorage.setItem("users", JSON.stringify([...users, { ...userObj, members }]));
+			updateCurrentUser({ ...currentUser, members: members });
+		}
 		dispatch(resetAuth());
+		dispatch(resetMembers());
 		router.push("/sign-in");
 	};
 	return (

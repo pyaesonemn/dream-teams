@@ -38,7 +38,7 @@ export const TEAM_FORM = [
 	{
 		name: "name",
 		type: "text",
-		label: "Name",
+		label: "Name (Name can't be changed later)",
 		placeholder: "Enter your team name here..."
 	},
 	{

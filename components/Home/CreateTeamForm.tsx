@@ -5,21 +5,16 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { selectAuth } from "@/redux/selects.";
 import { FC, useEffect, useState } from "react";
-import { Team, isTeamNameUnique } from "@/utils";
+import { Team, isTeamNameUnique, updateCurrentUser } from "@/utils";
 
 type CreateTeamFormProps = {
 	setShowModal: (value: boolean) => void;
+	pathName?: string;
 	previousData?: Team;
 };
 
-export const CreateTeamForm: FC<CreateTeamFormProps> = ({ setShowModal, previousData }) => {
-	const {
-		register,
-		handleSubmit,
-		reset,
-		formState: { errors },
-		setError
-	} = useForm();
+export const CreateTeamForm: FC<CreateTeamFormProps> = ({ setShowModal, previousData, pathName }) => {
+	const { register, handleSubmit, reset } = useForm();
 	const { user: currentUserName } = useSelector(selectAuth);
 	const [customErrors, setCustomErrors] = useState<Array<string>>([]);
 
@@ -39,23 +34,47 @@ export const CreateTeamForm: FC<CreateTeamFormProps> = ({ setShowModal, previous
 		const users = JSON.parse(localStorage.getItem("users") || "[]");
 		const currentUser = users.find((user: any) => user.username === currentUserName);
 		if (currentUser) {
-			if (!currentUser.teams) {
-				currentUser.teams = [];
+			const existingTeamIndex = currentUser?.teams?.findIndex(
+				(team: any) => team.name === data.name
+			);
+			if (existingTeamIndex === -1 || existingTeamIndex === undefined) {
+				if (!currentUser.teams) {
+					currentUser.teams = [];
+				}
+				if (isTeamNameUnique(data.name, currentUser.teams)) {
+					setCustomErrors([]);
+					currentUser.teams.push({
+						name: data.name,
+						playerCount: data.playerCount,
+						region: data.region,
+						country: data.country
+					});
+					updateCurrentUser({
+						...currentUser,
+						teams: currentUser.teams
+					});
+					setShowModal(false);
+					pathName === "my-teams" && window.location.reload();
+				} else {
+					setCustomErrors(["Team name must be unique."]);
+				}
 			}
-			if (isTeamNameUnique(data.name, currentUser.teams)) {
-				setCustomErrors([]);
-				currentUser.teams.push({
-					name: data.name,
+			if (existingTeamIndex !== -1) {
+				currentUser.teams[existingTeamIndex] = {
+					...currentUser?.teams?.[existingTeamIndex],
 					playerCount: data.playerCount,
 					region: data.region,
-					country: data.country,
-					players: []
+					country: data.country
+				};
+				updateCurrentUser({
+					...currentUser,
+					teams: currentUser.teams
 				});
+				setCustomErrors([]);
 				setShowModal(false);
-			} else {
-				setCustomErrors(["Team name must be unique."]);
+				console.log("Team updated successfully.");
+				pathName === "my-teams" && window.location.reload();
 			}
-			localStorage.setItem("users", JSON.stringify(users));
 		} else {
 			console.log("User not found");
 		}
@@ -66,6 +85,7 @@ export const CreateTeamForm: FC<CreateTeamFormProps> = ({ setShowModal, previous
 			{TEAM_FORM.map(({ name, type, label, placeholder }) => (
 				<Input
 					key={name}
+					disabled={name === "name" && previousData?.name !== undefined}
 					required={true}
 					name={name}
 					type={type}

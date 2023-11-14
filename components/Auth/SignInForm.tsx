@@ -8,6 +8,7 @@ import { useState } from "react";
 import { cn } from "@/utils/cn";
 import { useDispatch } from "react-redux";
 import { setLoggedIn, setUser } from "@/redux/modules/auth";
+import { setMembers } from "@/redux/modules/team";
 
 export const SignInForm = () => {
 	const router = useRouter();
@@ -20,7 +21,10 @@ export const SignInForm = () => {
 	const onSubmit = (data: any) => {
 		const users = JSON.parse(localStorage.getItem("users") || "[]");
 		const { username, password } = data;
-		const foundUser = users.find((user: any) => user.username === username);
+		const foundUser = users?.find((user: any) => user.username === username);
+		const membersArray = foundUser?.members || [];
+		console.log({ foundUser });
+		dispatch(setMembers(membersArray));
 
 		if (foundUser) {
 			if (foundUser.password === password) {

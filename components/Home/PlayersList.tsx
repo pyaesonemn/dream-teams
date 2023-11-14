@@ -7,7 +7,7 @@ import { usePlayersQuery } from "@/services/modules/players";
 import { incrementPageNumber } from "@/redux/modules/playersList";
 import { useEffect, useState } from "react";
 import { Button, LoadingIndicator, Modal } from "..";
-import { selectAuth, selectPlayersList } from "@/redux/selects.";
+import { selectAuth, selectPlayersList, selectTeam } from "@/redux/selects.";
 
 type Team = {
 	id: number;
@@ -47,7 +47,8 @@ export const PlayersList = () => {
 	const dispatch = useDispatch();
 	const { pageNumber, keyword } = useSelector(selectPlayersList);
 	const { isLoggedIn, user } = useSelector(selectAuth);
-	console.log({ isLoggedIn, user });
+	const { members } = useSelector(selectTeam);
+	console.log({ members });
 
 	const [players, setPlayers] = useState<Player[]>([]);
 	const [searchResult, setSearchResult] = useState<Player[]>([]);

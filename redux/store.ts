@@ -4,12 +4,12 @@ import { storage } from "./customStorage";
 import { rootReducer } from "./rootReducer";
 import { api } from "@/services/api";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { AUTH_SLICE } from "./constants";
+import { AUTH_SLICE, TEAM_SLICE } from "./constants";
 
 const authPersistConfig = {
 	key: "auth",
 	storage: storage,
-	whitelist: [AUTH_SLICE]
+	whitelist: [AUTH_SLICE, TEAM_SLICE]
 };
 
 const reducer = persistReducer(
