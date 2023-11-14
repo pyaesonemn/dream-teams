@@ -44,15 +44,11 @@ export const DreamTeamSelect: FC<DreamTeamSelectProps> = ({
 		const existingPlayerIndex = members.findIndex((member) => member.playerName === playerName);
 		const targetTeam: any = currentUser.teams?.find((team) => team.name === teamName);
 
-		// const { playerName, teamName } = member;
-		console.log({ member });
-
 		if (existingPlayerIndex !== -1) {
 			dispatch(removeMember(members[existingPlayerIndex].playerName));
 			const updatedPlayers = targetTeam?.players?.filter(
 				(player: Player) => player.name !== playerName
 			);
-			console.log({ updatedPlayers });
 			if (teamName !== "") {
 				dispatch(addMember({ playerName, teamName }));
 				updatedPlayers?.push({ name: playerName, position: playerPosition });

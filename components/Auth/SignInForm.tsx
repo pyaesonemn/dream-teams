@@ -23,13 +23,12 @@ export const SignInForm = () => {
 		const { username, password } = data;
 		const foundUser = users?.find((user: any) => user.username === username);
 		const membersArray = foundUser?.members || [];
-		console.log({ foundUser });
 		dispatch(setMembers(membersArray));
 
 		if (foundUser) {
 			if (foundUser.password === password) {
 				setErrors([]);
-				router.push("/");
+				router.replace("/players");
 				dispatch(setUser(foundUser.username));
 				dispatch(setLoggedIn(true));
 			} else {

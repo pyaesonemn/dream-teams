@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { setKeyword } from "@/redux/modules/playersList";
 import { useDispatch } from "react-redux";
 import { usePathname, useRouter } from "next/navigation";
+import { IoMdArrowRoundBack, IoIosAdd } from "react-icons/io";
 import { useState } from "react";
 import { CreateTeamForm } from ".";
 
@@ -15,7 +16,6 @@ type searchData = {
 export const LowerNavbar = () => {
 	const router = useRouter();
 	const pathName = usePathname();
-	console.log(pathName);
 	const dispatch = useDispatch();
 
 	const { register, handleSubmit } = useForm();
@@ -48,17 +48,32 @@ export const LowerNavbar = () => {
 				onClick={() => setShowModal((prev) => !prev)}
 				type="button"
 				variant="primary"
-				className="h-11 w-24 px-3 py-1 text-xs sm:w-32 sm:py-2 md:w-40 md:px-4 md:text-sm lg:w-48 lg:text-base">
-				Make a team
+				className="flex h-11 w-16 items-center justify-center px-3 py-1 text-xs sm:w-24 sm:w-32 sm:py-2 md:w-40 md:px-4 md:text-sm lg:w-48 lg:text-base">
+				<span className="hidden sm:block">Make a team</span>
+				<span className="block sm:hidden">
+					<IoIosAdd className="h-7 w-7" />
+				</span>
 			</Button>
 			<Button
 				onClick={() =>
-					pathName === "/my-teams" ? router.push("/") : router.push("/my-teams")
+					pathName === "/my-teams" ? router.push("/players") : router.push("/my-teams")
 				}
 				type="button"
 				variant="primary"
-				className="flex h-11 w-24 items-center px-3 py-1 text-xs sm:w-32 sm:py-2 md:w-40 md:px-4 md:text-sm lg:w-48 lg:text-base">
-				{pathName === "/my-teams" ? "Back to list" : "Check out teams"}
+				className="flex h-11 w-24 px-3 py-1 text-xs sm:w-32 sm:py-2 md:w-40 md:px-4 md:text-sm lg:w-48 lg:text-base">
+				{pathName === "/my-teams" ? (
+					<div className="flex h-full w-full items-center justify-center">
+						<span className="hidden sm:block">Back to list</span>
+						<span className="block sm:hidden">
+							<IoMdArrowRoundBack className="h-5 w-5" />
+						</span>
+					</div>
+				) : (
+					<div className="flex h-full w-full items-center justify-center">
+						<span className="hidden sm:block">Check out teams</span>
+						<span className="block sm:hidden">Teams</span>
+					</div>
+				)}
 			</Button>
 		</div>
 	);

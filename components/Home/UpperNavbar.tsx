@@ -9,6 +9,7 @@ import { resetAuth } from "@/redux/modules/auth";
 import { useRouter } from "next/navigation";
 import { getCurrentUser, updateCurrentUser } from "@/utils";
 import { resetMembers } from "@/redux/modules/team";
+import Link from "next/link";
 
 export const UpperNavbar = () => {
 	const router = useRouter();
@@ -19,8 +20,6 @@ export const UpperNavbar = () => {
 	const handleLogOut = () => {
 		const currentUser = getCurrentUser(user);
 		const users = JSON.parse(window.localStorage.getItem("users") || "[]");
-		const userObj = users?.find((user: any) => user.username === currentUser.username);
-		console.log({ userObj });
 		if (currentUser) {
 			if (!currentUser.members) {
 				currentUser.members = [];
@@ -30,12 +29,14 @@ export const UpperNavbar = () => {
 		}
 		dispatch(resetAuth());
 		dispatch(resetMembers());
-		router.push("/sign-in");
+		router.replace("/sign-in");
 	};
 	return (
 		<div className="flex h-16 w-full items-center justify-between px-2 sm:px-6 md:gap-x-5 md:px-5 xl:px-0">
-			<h1 className="text-xl font-bold text-orange-500 sm:text-3xl">Dream Teams</h1>
-			<div className="flex flex-row items-center gap-x-5">
+			<Link href={"/players"}>
+				<h1 className="text-xl font-bold text-orange-500 sm:text-3xl">Dream Teams</h1>
+			</Link>
+			<div className="flex flex-row items-center gap-x-2 sm:gap-x-5">
 				<div className="flex flex-row items-center gap-x-2 sm:gap-x-3">
 					<span className="text-xs font-semibold sm:text-sm">{user}</span>
 					<FiUser className="h-5 w-5" />

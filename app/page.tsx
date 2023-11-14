@@ -1,11 +1,16 @@
-"use client";
+import Link from "next/link";
+import ProtectedRoute from "./ProtectedRoute";
 
-import { PlayersList } from "@/components/Home";
-
-export default function Home() {
+const Page = () => {
 	return (
-		<main className="h-full">
-			<PlayersList />
+		<main className="h-[100dvh] w-[100dvw]">
+			<Link
+				href="/players"
+				className="flex h-full items-center justify-center text-orange-500 hover:underline">
+				Go to main app.
+			</Link>
 		</main>
 	);
-}
+};
+
+export default Page;

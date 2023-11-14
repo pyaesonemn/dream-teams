@@ -1,3 +1,5 @@
+"use client";
+
 import { FC, useState } from "react";
 import { Button, Card, DreamTeamSelect, Modal } from "..";
 import { useDispatch, useSelector } from "react-redux";

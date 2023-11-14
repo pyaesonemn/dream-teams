@@ -48,7 +48,6 @@ export const PlayersList = () => {
 	const { pageNumber, keyword } = useSelector(selectPlayersList);
 	const { isLoggedIn, user } = useSelector(selectAuth);
 	const { members } = useSelector(selectTeam);
-	console.log({ members });
 
 	const [players, setPlayers] = useState<Player[]>([]);
 	const [searchResult, setSearchResult] = useState<Player[]>([]);
