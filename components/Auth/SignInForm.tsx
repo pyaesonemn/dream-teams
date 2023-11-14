@@ -28,7 +28,7 @@ export const SignInForm = () => {
 		if (foundUser) {
 			if (foundUser.password === password) {
 				setErrors([]);
-				router.replace("/players");
+				router.replace("/");
 				dispatch(setUser(foundUser.username));
 				dispatch(setLoggedIn(true));
 			} else {

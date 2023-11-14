@@ -3,11 +3,13 @@
 import { Button, Input, Modal } from "..";
 import { useForm } from "react-hook-form";
 import { setKeyword } from "@/redux/modules/playersList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { usePathname, useRouter } from "next/navigation";
 import { IoMdArrowRoundBack, IoIosAdd } from "react-icons/io";
 import { useState } from "react";
 import { CreateTeamForm } from ".";
+import { selectAuth } from "@/redux/selects.";
+import Link from "next/link";
 
 type searchData = {
 	searchKeyword: string;
@@ -20,9 +22,12 @@ export const LowerNavbar = () => {
 
 	const { register, handleSubmit } = useForm();
 
+	const { isLoggedIn } = useSelector(selectAuth);
+
 	const onSubmit = (data: any) => dispatch(setKeyword(data.searchKeyword));
 
 	const [showModal, setShowModal] = useState<boolean>(false);
+	const [showWarningModal, setShowWarningModal] = useState<boolean>(false);
 
 	return (
 		<div className="flex h-16 w-full items-center justify-between gap-x-2 px-2 sm:px-6 md:gap-x-5 md:px-5 xl:px-0">
@@ -35,6 +40,19 @@ export const LowerNavbar = () => {
 					<CreateTeamForm pathName={pathName} setShowModal={setShowModal} />
 				</div>
 			</Modal>
+			<Modal
+				className="max-w-lg"
+				show={showWarningModal}
+				title="You need an account"
+				onClose={() => setShowWarningModal(false)}
+				onOk={() => {}}>
+				<div>
+					<span>Please create a new account or sign in to create a team. </span>
+					<Link href="/sign-in" className="text-orange-500 hover:underline">
+						Sign In.
+					</Link>
+				</div>
+			</Modal>
 			<form className="w-full" onSubmit={handleSubmit(onSubmit)}>
 				<Input
 					type="search"
@@ -45,7 +63,11 @@ export const LowerNavbar = () => {
 				/>
 			</form>
 			<Button
-				onClick={() => setShowModal((prev) => !prev)}
+				onClick={() =>
+					isLoggedIn
+						? setShowModal((prev) => !prev)
+						: setShowWarningModal((prev) => !prev)
+				}
 				type="button"
 				variant="primary"
 				className="flex h-11 w-16 items-center justify-center px-3 py-1 text-xs sm:w-24 sm:w-32 sm:py-2 md:w-40 md:px-4 md:text-sm lg:w-48 lg:text-base">
@@ -56,7 +78,7 @@ export const LowerNavbar = () => {
 			</Button>
 			<Button
 				onClick={() =>
-					pathName === "/my-teams" ? router.push("/players") : router.push("/my-teams")
+					pathName === "/my-teams" ? router.push("/") : router.push("/my-teams")
 				}
 				type="button"
 				variant="primary"

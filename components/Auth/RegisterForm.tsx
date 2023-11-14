@@ -34,7 +34,7 @@ export const RegisterForm = () => {
 		}
 		localStorage.setItem("users", JSON.stringify(users.concat({ username, password })));
 		setErrors([]);
-		router.replace("/players");
+		router.replace("/");
 		dispatch(setUser(username));
 		dispatch(setLoggedIn(true));
 	};

@@ -1,7 +1,7 @@
 "use client";
 
 import { Team, getCurrentUser, updateCurrentUser } from "@/utils";
-import { FC, use, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { Button, Card, Modal } from "..";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CreateTeamForm } from "../Home";
