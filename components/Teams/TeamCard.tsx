@@ -1,26 +1,47 @@
 "use client";
 
-import { Team } from "@/utils";
-import { FC, useState } from "react";
+import { Team, getCurrentUser, updateCurrentUser } from "@/utils";
+import { FC, use, useEffect, useState } from "react";
 import { Button, Card, Modal } from "..";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CreateTeamForm } from "../Home";
 import { TeamPlayersModal } from "./TeamPlayersModal";
+import { useSelector } from "react-redux";
+import { selectAuth } from "@/redux/selects.";
 
 type TeamCardProps = {
 	teamInfo: Team;
 };
 
 export const TeamCard: FC<TeamCardProps> = ({ teamInfo }) => {
+	const { user } = useSelector(selectAuth);
 	const [showEditModal, setShowEditModal] = useState<boolean>(false);
 	const [showPlayersModal, setShowPlayersModal] = useState<boolean>(false);
 	const TeamData = [
 		{ label: "Name", value: `${teamInfo?.name}` },
-		{ label: "Player Count", value: `${teamInfo?.players?.length}` },
+		{ label: "Player Count", value: `${teamInfo?.playerCount}` },
 		{ label: "Region", value: `${teamInfo?.region}` },
 		{ label: "Country", value: `${teamInfo?.country}` }
 	];
-	console.log(teamInfo.players);
+
+	const handleDeleteTeam = (teamNametoDelete: string) => {
+		const currentUser = getCurrentUser(user);
+
+		if (currentUser) {
+			const updatedTeams = currentUser?.teams?.filter(
+				(team: any) => team.name !== teamNametoDelete
+			);
+			updateCurrentUser({
+				...currentUser,
+				teams: updatedTeams
+			});
+			window.location.reload();
+			console.log(`Team '${teamNametoDelete}' deleted successfully.`);
+		} else {
+			console.log("User not found");
+		}
+	};
+
 	return (
 		<>
 			<Modal
@@ -59,7 +80,10 @@ export const TeamCard: FC<TeamCardProps> = ({ teamInfo }) => {
 							className="w-full rounded-2xl text-sm">
 							Show Players
 						</Button>
-						<Button variant="primary" className="max-w-[4rem] rounded-2xl bg-red-500">
+						<Button
+							onClick={() => handleDeleteTeam(teamInfo.name)}
+							variant="primary"
+							className="max-w-[4rem] rounded-2xl bg-red-500">
 							<AiOutlineDelete className="h-5 w-5" />
 						</Button>
 					</div>

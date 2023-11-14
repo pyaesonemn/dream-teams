@@ -20,7 +20,14 @@ export const TeamPlayersModal: FC<TeamPlayersModalProps> = ({
 	return (
 		<Modal onClose={onClose} onOk={onOk} show={show} title={title} className="min-h-[24rem]">
 			{Boolean(players?.length) ? (
-				<div>wow, there are players</div>
+				<div>
+					{players?.map((player) => (
+						<div className="flex flex-row justify-between px-4 py-2" key={player.name}>
+							<div>{player.name}</div>
+							<div>position : {player.position ? player.position : "-"}</div>
+						</div>
+					))}
+				</div>
 			) : (
 				<div className="mt-32 flex w-full items-center justify-center text-3xl font-bold text-gray-300">
 					No player yet.

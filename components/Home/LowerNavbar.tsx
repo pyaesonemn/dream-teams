@@ -32,7 +32,7 @@ export const LowerNavbar = () => {
 				onClose={() => setShowModal(false)}
 				onOk={() => {}}>
 				<div>
-					<CreateTeamForm setShowModal={setShowModal} />
+					<CreateTeamForm pathName={pathName} setShowModal={setShowModal} />
 				</div>
 			</Modal>
 			<form className="w-full" onSubmit={handleSubmit(onSubmit)}>
